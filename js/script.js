@@ -31,18 +31,21 @@ $(document).ready(function() {
     renderBlocks();
 
     // Save task description to local storage when "Save" button is clicked
-    $(".saveBtn").click(function(event) {
+    $(document).on("click", ".saveBtn", function(event) {
+        event.preventDefault();
         var target = $(event.target);
         var hour = parseInt(target.attr("data-hour"));
         var taskDescr = $(`#descr-${hour}`).val();
 
         // save taskDescr to local storage of tasks for the day
         tasks[hour - 9] = taskDescr;
+        console.log(`Setting tasks[${hour-9}] to ${taskDescr}`);
         localStorage.setItem("tasks", JSON.stringify(tasks));
         localStorage.setItem("lastUpdate", moment()._d.getDay());
 
         // Re-draw time blocks
         renderBlocks();
+        console.log("done with click event listener")
     });
 
     // Function to draw all time blocks and load any saved task content
@@ -63,13 +66,13 @@ $(document).ready(function() {
             newBlockLabel.text(`${iDay} ${i + 9 >= 12 ? "PM" : "AM"}`);
 
             var newBlockTextArea = $("<textarea>").addClass("description");
-            newBlockTextArea.attr("id", `descr-${iDay}`);
+            newBlockTextArea.attr("id", `descr-${i + 9}`);
             newBlockTextArea.attr("cols", "30");
             newBlockTextArea.attr("rows", "4");
             newBlockTextArea.text(tasks[i]);
 
             var newBlockSaveBtn = $("<button>").addClass("saveBtn");
-            newBlockSaveBtn.attr("data-hour", `${iDay}`)
+            newBlockSaveBtn.attr("data-hour", `${i + 9}`)
             newBlockSaveBtn.text("Save");
 
             newBlock.append(newBlockLabel);
