@@ -8,7 +8,6 @@ $(document).ready(function() {
     $("#currentDay").text(`${today}, ${month} ${date}`);
 
     var lastUpdate = localStorage.getItem("lastUpdate") ? parseInt(localStorage.getItem("lastUpdate")) : 0;
-    console.log(now._d.getDay());
     
     var tasks;
     if (lastUpdate) {
@@ -16,11 +15,8 @@ $(document).ready(function() {
             console.log("New day, clearing tasks");
             tasks = ["", "", "", "", "", "", "", "", ""];
             localStorage.setItem("tasks", JSON.stringify(tasks));
-            // clearTasks();
         }
     }
-
-    
     
     // Pull saved tasks from local storage
     var tRead;
@@ -30,9 +26,11 @@ $(document).ready(function() {
         tasks = ["", "", "", "", "", "", "", "", ""];
         localStorage.setItem("tasks", JSON.stringify(tasks));
     }
+
+    // Draw all time blocks on page load
     renderBlocks();
 
-    console.log(tasks);
+    // Save task description to local storage when "Save" button is clicked
     $(".saveBtn").click(function(event) {
         var target = $(event.target);
         var hour = parseInt(target.attr("data-hour"));
@@ -42,7 +40,8 @@ $(document).ready(function() {
         tasks[hour - 9] = taskDescr;
         localStorage.setItem("tasks", JSON.stringify(tasks));
         localStorage.setItem("lastUpdate", moment()._d.getDay());
-        console.log(lastUpdate + " " + now._d.getDay())
+
+        // Re-draw time blocks
         renderBlocks();
     });
 
@@ -78,10 +77,18 @@ $(document).ready(function() {
             newBlock.append(newBlockSaveBtn);
             newRow.append(newBlock);
             timeBlockContainer.append(newRow);
+
+
+            var thisBlockHourStart = moment({hour: i + 9, minute: 00});
+            var thisBlockHourEnd = moment({hour: i + 10, minute: 00});
+            if (thisBlockHourEnd.isBefore(moment())) {
+                newBlockTextArea.addClass("past");
+            } else if (thisBlockHourEnd.isBefore(moment()) && thisBlockHourStart.isBefore(moment())) {
+                newBlockTextArea.addClass("present");
+            } else {
+                newBlockTextArea.addClass("future");
+            }
         }
     }
 
-    function clearTasks() {
-
-    }
 });

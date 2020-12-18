@@ -23,15 +23,19 @@ textarea{
 
 .description{
   white-space: pre-wrap;
+  width: 75%;
 }
 
 .time-block{
+  display: flex;
+  justify-content: center;
   text-align: center;
   border-radius: 15px;
 }
 
 .row {
   white-space: pre-wrap;
+  margin-bottom: 5px;
   height: 80px;
   border-top: 1px solid white;;
 }
@@ -40,6 +44,7 @@ textarea{
   background-color: #ffffff;
   color: #000000;
   border-top: 1px dashed #000000;
+  width: 50px;
 }
 
 .past {
